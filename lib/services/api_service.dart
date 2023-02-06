@@ -77,4 +77,26 @@ class APIServices {
       rethrow;
     }
   }
+
+  static Future<bool> createTask({required String title, required String description, required TaskStatus status, required String token}) async {
+    String url = "/createTask";
+    _header["token"] = token;
+    try {
+      final http.Response response = await http.post(
+        Uri.parse("$_baseURL$url"),
+        headers: _header,
+        body: jsonEncode({
+          "title": title,
+          "description": description,
+          "status": status.name,
+        }),
+      );
+      if (response.statusCode != 200) throw response.statusCode;
+
+      // return true is Response is success
+      return jsonDecode(response.body)['status'] == "success" ? true : false;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

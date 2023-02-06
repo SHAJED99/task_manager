@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_manager/controllers/data_controller.dart';
@@ -57,8 +55,9 @@ class FullProfileImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomCard(
+      alignment: null,
       clipBehavior: Clip.antiAlias,
-      height: 300,
+      constraints: const BoxConstraints(maxHeight: 300),
       child: Stack(
         children: [
           // Profile picture
@@ -81,6 +80,7 @@ class FullProfileImage extends StatelessWidget {
             right: 0,
             child: CustomCard(
               backgroundColor: defaultTextColorLight.withOpacity(0.5),
+              alignment: Alignment.centerLeft,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: defaultPadding, vertical: defaultPadding / 2),
                 child: Column(
@@ -98,16 +98,16 @@ class FullProfileImage extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: defaultPadding / 2,
-            right: defaultPadding,
+            top: defaultPadding / 2,
+            right: defaultPadding / 2,
             child: CustomIconButton(
               backgroundColor: Theme.of(context).primaryColor,
               padding: defaultPadding / 2,
+              size: defaultPadding * 2.5,
               icon: const Icon(
                 Icons.edit,
                 color: defaultTextColorDark,
               ),
-              size: defaultPadding * 2.5,
               onTap: () {},
             ),
           ),

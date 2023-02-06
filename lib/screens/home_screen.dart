@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_manager/controllers/data_controller.dart';
 import 'package:task_manager/models/task_status.dart';
+import 'package:task_manager/screens/add_new_task_screen.dart';
 import 'package:task_manager/screens/task_details_screen.dart';
 import 'package:task_manager/style.dart';
 import 'package:task_manager/widgets/app_bar_widget.dart';
@@ -48,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ? null
           : FloatingActionButton.small(
               elevation: defaultElevation,
-              onPressed: () {},
+              onPressed: () => Get.to(() => AddNewTask()),
               child: const Icon(Icons.add),
             ),
 

@@ -1,12 +1,12 @@
 import 'dart:io';
 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/models/task_model.dart';
 import 'package:task_manager/models/task_status.dart';
 import 'package:task_manager/models/user_data_model.dart';
 import 'package:task_manager/services/api_service.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tuple/tuple.dart';
 
 class Data extends GetxController {
@@ -42,6 +42,7 @@ class Data extends GetxController {
 
   // Refrash data
   reloadData() async {
+    // showSnack("Message", "Loading data");
     if (token != null) await _errorHandle(() async => await loadTasks());
     update();
   }
@@ -68,14 +69,14 @@ class Data extends GetxController {
     try {
       return await function();
     } on SocketException catch (_) {
-      Fluttertoast.showToast(msg: "No internet connection");
+      showSnack("Error!", "No internet connection");
     } catch (e) {
       if (e == 401) {
         token = null;
-        Fluttertoast.showToast(msg: "Unauthorized user details");
+        showSnack("Error!", "Unauthorized user details");
         _sharedPreferences.clear();
       } else {
-        Fluttertoast.showToast(msg: e.toString());
+        showSnack("Error!", e.toString());
       }
     }
   }
@@ -87,7 +88,7 @@ class Data extends GetxController {
       userData = values.item2;
     });
     if (token == null) return;
-    Fluttertoast.showToast(msg: "Login successful");
+    showSnack("Success", "Login successful");
 
     _sharedPreferences.setString('token', token!);
     _sharedPreferences.setString('email', userData.email ?? "");
@@ -114,10 +115,34 @@ class Data extends GetxController {
   Future<bool> signupRequest({required UserData userData, required String password}) async {
     bool result = await _errorHandle(() async => await APIServices.signup(userData: userData, password: password));
     if (!result) {
-      Fluttertoast.showToast(msg: "Faild to create new account");
+      showSnack("Error!", "Faild to create new account");
     } else {
-      Fluttertoast.showToast(msg: "Account has been created");
+      showSnack("Success", "Account has been created");
     }
     return result;
+  }
+
+  Future<bool> createTask({required String title, required String description, TaskStatus status = TaskStatus.New}) async {
+    bool result = await _errorHandle(() async => await APIServices.createTask(title: title, description: description, status: status, token: token ?? ""));
+    showSnack("Message", "Requesting");
+    if (!result) {
+      showSnack("Error!", "Faild to create new task");
+    } else {
+      showSnack("Success", "new task has been created");
+      await reloadData();
+    }
+    return result;
+  }
+
+  void showSnack(String title, String message) {
+    // Get.snackbar(
+    //   title,
+    //   message,
+    //   snackPosition: SnackPosition.BOTTOM,
+    //   margin: const EdgeInsets.all(defaultPadding / 2),
+    //   padding: const EdgeInsets.all(defaultPadding / 2),
+    // );
+
+    Fluttertoast.showToast(msg: "$title: $message");
   }
 }
