@@ -7,19 +7,21 @@ class CustomCard extends StatelessWidget {
   final AlignmentGeometry? alignment;
   final List<BoxShadow>? boxShadow;
   final Function()? onTap;
-  const CustomCard({super.key, this.child, this.onTap, this.height, this.alignment = Alignment.center, this.boxShadow = defaultShadow});
+  final Clip clipBehavior;
+  final Color? backgroundColor;
+  const CustomCard({super.key, this.child, this.onTap, this.height, this.alignment = Alignment.center, this.boxShadow = defaultShadow, this.clipBehavior = Clip.antiAlias, this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: clipBehavior,
       margin: const EdgeInsets.all(defaultPadding / 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(defaultPadding / 4),
         boxShadow: boxShadow,
       ),
       child: Material(
-        color: Theme.of(context).cardColor,
+        color: backgroundColor ?? Theme.of(context).cardColor,
         child: InkWell(
           onTap: onTap,
           child: Container(

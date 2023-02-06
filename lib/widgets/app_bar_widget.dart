@@ -15,15 +15,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => Size.fromHeight(height);
 
-  Widget circleAvatar({required String url, required Widget onError}) {
-    // try {
-    //   return CircleAvatar(backgroundImage: NetworkImage(url));
-    // } catch (e) {
-    return CircleAvatar(child: Image.network(url, errorBuilder: (context, error, stackTrace) => onError));
-    // return onError;
-    // }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -40,33 +31,57 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
           // User details
           Expanded(
-            child: InkWell(
-              onTap: onTap,
-              child: Container(
-                margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-                padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-                child: Row(
-                  children: [
-                    // Showing profile photo
-                    CircleAvatar(
-                        child: Image.network(data.userData.photo ?? "",
-                            errorBuilder: (context, error, stackTrace) => const FractionallySizedBox(heightFactor: 0.8, child: FittedBox(child: Icon(Icons.person, color: defaultTextColorDark))))),
-                    const SizedBox(width: defaultPadding / 2),
-                    Flexible(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Flexible(child: Text("${data.userData.firstName ?? "Unknown"} ${data.userData.lastName ?? ""}", style: title)),
-                          const SizedBox(height: defaultPadding / 10),
-                          Flexible(child: Text(data.userData.email ?? "Unknown", style: subTitle1.copyWith(color: defaultTextColorDark))),
-                        ],
+            child: GetBuilder<Data>(builder: (_) {
+              return InkWell(
+                onTap: onTap,
+                child: Container(
+                  margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+                  padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                  child: Row(
+                    children: [
+                      // Showing profile photo
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: defaultPadding / 2),
+                        alignment: Alignment.center,
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: ClipOval(
+                            child: Image.network(
+                              data.userData.photo ?? "",
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => Container(
+                                alignment: Alignment.center,
+                                color: defaultTextColorDark,
+                                child: FractionallySizedBox(
+                                  heightFactor: 0.8,
+                                  child: FittedBox(
+                                    child: Icon(Icons.person, color: Theme.of(context).primaryColor),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                    )
-                  ],
+                      const SizedBox(width: defaultPadding / 2),
+                      Flexible(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Name
+                            Flexible(child: Text("${data.userData.firstName ?? "Unknown"} ${data.userData.lastName ?? ""}", style: title)),
+                            const SizedBox(height: defaultPadding / 10),
+                            // Email
+                            Flexible(child: Text(data.userData.email ?? "Unknown", style: subTitle1.copyWith(color: defaultTextColorDark))),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            }),
           )
         ],
       ),

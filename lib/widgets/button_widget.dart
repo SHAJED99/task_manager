@@ -6,13 +6,14 @@ class CustomIconButton extends StatelessWidget {
   final Widget? icon;
   final double size;
   final double padding;
-  const CustomIconButton({super.key, this.onTap, this.icon, this.size = 16, this.padding = 2});
+  final Color backgroundColor;
+  const CustomIconButton({super.key, this.onTap, this.icon, this.size = 16, this.padding = 2, this.backgroundColor = Colors.transparent});
 
   @override
   Widget build(BuildContext context) {
     return ClipOval(
       child: Material(
-        color: Colors.transparent,
+        color: backgroundColor,
         child: InkWell(
           onTap: onTap,
           child: SizedBox(

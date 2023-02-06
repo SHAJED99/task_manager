@@ -96,6 +96,8 @@ class Data extends GetxController {
     _sharedPreferences.setString('mobile', userData.mobile ?? "");
     _sharedPreferences.setString('photo', userData.photo ?? "");
 
+    print(userData.photo);
+
     // Loading tasks and check if the token is valid or not
     await _errorHandle(() async => await loadTasks());
 
