@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_manager/controllers/data_controller.dart';
-import 'package:task_manager/models/task_status.dart';
 import 'package:task_manager/style.dart';
 import 'package:task_manager/widgets/app_bar_widget.dart';
 import 'package:task_manager/widgets/background_image_widget.dart';

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_manager/controllers/data_controller.dart';
-import 'package:task_manager/models/task_status.dart';
+import 'package:task_manager/models/task_status_model.dart';
 import 'package:task_manager/screens/add_new_task_screen.dart';
 import 'package:task_manager/screens/task_details_screen.dart';
 import 'package:task_manager/style.dart';
 import 'package:task_manager/widgets/app_bar_widget.dart';
 import 'package:task_manager/widgets/app_drawer_widget.dart';
 import 'package:task_manager/widgets/background_image_widget.dart';
-import 'package:task_manager/widgets/botton_navigation_bar.dart';
+import 'package:task_manager/widgets/botton_navigation_bar_widget.dart';
 import 'package:task_manager/widgets/status_count_tiles_widget.dart';
 
 class HomeScreen extends StatefulWidget {

@@ -4,6 +4,8 @@ import 'package:task_manager/services/auto_genarated_service.dart';
 import 'package:task_manager/style.dart';
 import 'package:task_manager/widgets/button_widget.dart';
 import 'package:task_manager/widgets/card_widget.dart';
+import 'package:task_manager/widgets/delete_confirmation_widget.dart';
+import 'package:task_manager/widgets/edit_status_widget.dart';
 
 class TaskTile extends StatelessWidget {
   final Task task;
@@ -33,8 +35,17 @@ class TaskTile extends StatelessWidget {
                       height: -1,
                       child: Text(textAutoGenarated(taskStatus: task.status), style: subTitle1.copyWith(color: defaultTextColorDark))),
                   const Spacer(),
-                  CustomIconButton(onTap: () {}, size: defaultBoxHeight, padding: defaultPadding / 2, icon: Icon(Icons.edit, color: Theme.of(context).primaryColor)),
-                  CustomIconButton(onTap: () {}, size: defaultBoxHeight, padding: defaultPadding / 2, icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error)),
+                  CustomIconButton(
+                    onTap: () => showDialog(context: context, builder: (context) => EditStatus(task: task)),
+                    size: defaultBoxHeight,
+                    padding: defaultPadding / 2,
+                    icon: Icon(Icons.edit, color: Theme.of(context).primaryColor),
+                  ),
+                  CustomIconButton(
+                      onTap: () => showDialog(context: context, builder: (context) => DeleteConfirmataion(task: task)),
+                      size: defaultBoxHeight,
+                      padding: defaultPadding / 2,
+                      icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error)),
                 ],
               ),
             ],

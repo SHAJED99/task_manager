@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/models/task_status.dart';
+import 'package:task_manager/models/task_status_model.dart';
 import 'package:task_manager/style.dart';
 
 Color colorAutoGenarated({required TaskStatus taskStatus}) {

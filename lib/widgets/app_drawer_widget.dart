@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_manager/controllers/data_controller.dart';
+import 'package:task_manager/screens/update_profile_screen.dart';
 import 'package:task_manager/style.dart';
 import 'package:task_manager/widgets/button_widget.dart';
 import 'package:task_manager/widgets/card_widget.dart';
@@ -108,7 +109,7 @@ class FullProfileImage extends StatelessWidget {
                 Icons.edit,
                 color: defaultTextColorDark,
               ),
-              onTap: () {},
+              onTap: () => Get.to(() => UpdateProfile()),
             ),
           ),
         ],

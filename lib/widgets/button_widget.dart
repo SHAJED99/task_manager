@@ -45,9 +45,11 @@ class CustomElevatedButton extends StatefulWidget {
     this.boxShadow = defaultShadow,
     this.onLoading,
     this.borderRadius = defaultPadding,
+    this.width,
   });
   final EdgeInsetsGeometry? padding;
   final double height;
+  final double? width;
   final bool isEnable;
   final Color? enableBackgroundColor;
   final Widget? child;
@@ -66,6 +68,7 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: widget.width,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(widget.borderRadius), boxShadow: widget.boxShadow),
       child: Material(
@@ -74,6 +77,7 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
           onTap: !widget.isEnable
               ? null
               : () async {
+                  if (isLoading) return;
                   setState(() => isLoading = true);
                   if (widget.onPressed != null) await widget.onPressed!();
                   if (mounted) setState(() => isLoading = false);
@@ -107,7 +111,7 @@ class CustomTextButton extends StatelessWidget {
       return textStyle!.copyWith(color: disabledColor);
     }
 
-    return textStyle ?? Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).primaryColor) ?? const TextStyle();
+    return textStyle ?? Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).primaryColor) ?? const TextStyle();
   }
 
   @override

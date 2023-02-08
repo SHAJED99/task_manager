@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/models/task_model.dart';
-import 'package:task_manager/models/task_status.dart';
+import 'package:task_manager/models/task_status_model.dart';
 import 'package:task_manager/models/user_data_model.dart';
 import 'package:task_manager/services/api_service.dart';
 import 'package:tuple/tuple.dart';
@@ -13,6 +13,7 @@ class Data extends GetxController {
   late SharedPreferences _sharedPreferences;
   String? token;
   UserData userData = UserData();
+  String _password = "";
   Map<TaskStatus, List<Task>> tasks = {
     TaskStatus.New: [],
     TaskStatus.Completed: [],
@@ -89,7 +90,7 @@ class Data extends GetxController {
     });
     if (token == null) return;
     showSnack("Success", "Login successful");
-
+    _password = password;
     _sharedPreferences.setString('token', token!);
     _sharedPreferences.setString('email', userData.email ?? "");
     _sharedPreferences.setString('firstName', userData.firstName ?? "");
@@ -129,9 +130,40 @@ class Data extends GetxController {
       showSnack("Error!", "Faild to create new task");
     } else {
       showSnack("Success", "new task has been created");
-      await reloadData();
+      await _errorHandle(() async => await loadTasks(taskStatus: status));
+      update();
     }
     return result;
+  }
+
+  Future<void> statusChange({required Task task, TaskStatus? currentStatus}) async {
+    if (token == null) return;
+    if (task.status == currentStatus) return;
+
+    // Status change
+    if (currentStatus != null) await _errorHandle(() async => await APIServices.statusChange(task: task, currentStatus: currentStatus, token: token ?? ""));
+
+    // Delete task (Move task to TaskStatus.Other)
+    if (currentStatus == null) await _errorHandle(() async => await APIServices.statusChange(task: task, currentStatus: TaskStatus.Other, token: token ?? ""));
+
+    showSnack("Success", currentStatus == null ? "Task delete successful" : "Status update successful");
+    await _errorHandle(() async => await loadTasks(taskStatus: task.status));
+    if (currentStatus != null) await _errorHandle(() async => await loadTasks(taskStatus: currentStatus));
+    update();
+  }
+
+  Future<bool> updateProfile({UserData? ud, String? password, File? file}) async {
+    if (token == null) return false;
+
+    if (await _errorHandle(() async => await APIServices.updateProfile(userData: ud, password: password, token: token ?? "", file: file))) {
+      showSnack("Success", "Profile update successful");
+      // Re-Login
+      await loginRequest(email: ud!.email ?? userData.email ?? "", password: password ?? _password);
+      return true;
+    } else {
+      showSnack("Error", "Update profile is not avaiable at this time");
+      return false;
+    }
   }
 
   void showSnack(String title, String message) {
