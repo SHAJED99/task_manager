@@ -68,6 +68,12 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    textEditingController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData(textSelectionTheme: TextSelectionThemeData(selectionColor: (widget.color ?? Theme.of(context).primaryColor).withOpacity(0.3))),

@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   // Change screen after showing splash
   endSplash() async {
-    Future.delayed(splashScreenDuration).then((value) => Get.off(() => Wrapper()));
+    Future.delayed(splashScreenDuration).then((value) => Get.off(() => const Wrapper()));
   }
 
   @override

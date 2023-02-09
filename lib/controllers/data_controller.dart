@@ -98,8 +98,6 @@ class Data extends GetxController {
     _sharedPreferences.setString('mobile', userData.mobile ?? "");
     _sharedPreferences.setString('photo', userData.photo ?? "");
 
-    print(userData.photo);
-
     // Loading tasks and check if the token is valid or not
     await _errorHandle(() async => await loadTasks());
 
@@ -114,26 +112,28 @@ class Data extends GetxController {
   }
 
   Future<bool> signupRequest({required UserData userData, required String password}) async {
-    bool result = await _errorHandle(() async => await APIServices.signup(userData: userData, password: password));
-    if (!result) {
-      showSnack("Error!", "Faild to create new account");
-    } else {
+    var result = await _errorHandle(() async => await APIServices.signup(userData: userData, password: password));
+    if (result ?? false) {
       showSnack("Success", "Account has been created");
+    } else {
+      showSnack("Error!", "Faild to create new account");
     }
-    return result;
+    return result ?? false;
   }
 
   Future<bool> createTask({required String title, required String description, TaskStatus status = TaskStatus.New}) async {
-    bool result = await _errorHandle(() async => await APIServices.createTask(title: title, description: description, status: status, token: token ?? ""));
     showSnack("Message", "Requesting");
-    if (!result) {
-      showSnack("Error!", "Faild to create new task");
-    } else {
+    var result = await _errorHandle(() async => await APIServices.createTask(title: title, description: description, status: status, token: token ?? ""));
+
+    if (result ?? false) {
       showSnack("Success", "new task has been created");
       await _errorHandle(() async => await loadTasks(taskStatus: status));
       update();
+      return true;
+    } else {
+      showSnack("Error!", "Faild to create new task");
+      return false;
     }
-    return result;
   }
 
   Future<void> statusChange({required Task task, TaskStatus? currentStatus}) async {
@@ -155,13 +155,15 @@ class Data extends GetxController {
   Future<bool> updateProfile({UserData? ud, String? password, File? file}) async {
     if (token == null) return false;
 
-    if (await _errorHandle(() async => await APIServices.updateProfile(userData: ud, password: password, token: token ?? "", file: file))) {
+    if (file != null) showSnack("Warnning", "Uploading file is not available now");
+
+    if (await _errorHandle(() async => await APIServices.updateProfile(userData: ud, password: password, token: token ?? "")) ?? false) {
       showSnack("Success", "Profile update successful");
       // Re-Login
       await loginRequest(email: ud!.email ?? userData.email ?? "", password: password ?? _password);
       return true;
     } else {
-      showSnack("Error", "Update profile is not avaiable at this time");
+      showSnack("Error", "Operation failed");
       return false;
     }
   }

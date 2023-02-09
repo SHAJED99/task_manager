@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_manager/controllers/data_controller.dart';
@@ -7,6 +9,7 @@ import 'package:task_manager/style.dart';
 import 'package:task_manager/widgets/app_bar_widget.dart';
 import 'package:task_manager/widgets/background_image_widget.dart';
 import 'package:task_manager/widgets/button_widget.dart';
+import 'package:task_manager/widgets/image_picker_input_field_widget.dart';
 import 'package:task_manager/widgets/text_field_widget.dart';
 
 class UpdateProfile extends StatelessWidget {
@@ -14,12 +17,12 @@ class UpdateProfile extends StatelessWidget {
 
   final Data data = Get.find();
   final GlobalKey<FormState> _formKey = GlobalKey();
-  final String tcPhoto = "";
   final TextEditingController tcEmail = TextEditingController();
   final TextEditingController tcFirstName = TextEditingController();
   final TextEditingController tcLastName = TextEditingController();
   final TextEditingController tcMobile = TextEditingController();
   final TextEditingController tcPassword = TextEditingController();
+  final TextEditingController tcPhoto = TextEditingController();
   final UserData userData = UserData();
 
   @override
@@ -51,7 +54,14 @@ class UpdateProfile extends StatelessWidget {
                   // Headline
                   Text("Update Profile", style: title.copyWith(color: defaultTextColorLight)),
                   const SizedBox(height: defaultPadding * 2),
-
+                  // Image Picker
+                  CustomImagePickerField(
+                    textEditingController: tcPhoto,
+                    validator: (value) {
+                      // return "va";
+                    },
+                  ),
+                  const SizedBox(height: defaultPadding / 2),
                   // email Input Field
                   CustomTextFormField(
                     textEditingController: tcEmail,
@@ -116,7 +126,7 @@ class UpdateProfile extends StatelessWidget {
                     borderRadius: defaultPadding / 4,
                     onPressed: () async {
                       if (!_formKey.currentState!.validate()) return;
-                      if (await data.updateProfile(file: null, password: tcPassword.text.isEmpty ? null : tcPassword.text, ud: userData)) Get.back();
+                      if (await data.updateProfile(file: tcPhoto.text.isEmpty ? null : File(tcPhoto.text), password: tcPassword.text.isEmpty ? null : tcPassword.text, ud: userData)) Get.back();
                     },
                     onLoading: const SizedBox(height: defaultBoxHeight, child: AspectRatio(aspectRatio: 1, child: CircularProgressIndicator(color: defaultTextColorDark))),
                     child: const Icon(Icons.arrow_circle_right_outlined, color: defaultTextColorDark),
