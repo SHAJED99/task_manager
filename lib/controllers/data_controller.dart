@@ -30,6 +30,7 @@ class Data extends GetxController {
     _sharedPreferences = await SharedPreferences.getInstance();
     token = _sharedPreferences.getString('token');
     userData.email = _sharedPreferences.getString('email');
+    _password = _sharedPreferences.getString('password') ?? "";
     userData.firstName = _sharedPreferences.getString('firstName');
     userData.lastName = _sharedPreferences.getString('lastName');
     userData.mobile = _sharedPreferences.getString('mobile');
@@ -93,6 +94,7 @@ class Data extends GetxController {
     _password = password;
     _sharedPreferences.setString('token', token!);
     _sharedPreferences.setString('email', userData.email ?? "");
+    _sharedPreferences.setString('password', password);
     _sharedPreferences.setString('firstName', userData.firstName ?? "");
     _sharedPreferences.setString('lastName', userData.lastName ?? "");
     _sharedPreferences.setString('mobile', userData.mobile ?? "");

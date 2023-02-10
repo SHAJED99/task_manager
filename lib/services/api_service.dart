@@ -213,12 +213,15 @@ class APIServices {
 
     try {
       if (isValid) {
+        print(requestBody.toString());
         final http.Response response = await http.post(
           Uri.parse("$_baseURL$url"),
           headers: _header,
           body: jsonEncode(requestBody),
         );
         if (response.statusCode != 200) throw response.statusCode;
+
+        print(jsonDecode(response.body));
 
         // return true is Response is success
         return jsonDecode(response.body)['status'] == "success" ? true : false;
