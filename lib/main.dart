@@ -9,7 +9,10 @@ import 'package:task_manager/style.dart';
 
 void main(List<String> args) => runApp(
       GetMaterialApp(
-        scrollBehavior: const MaterialScrollBehavior().copyWith(dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse}),
+        scrollBehavior: const MaterialScrollBehavior().copyWith(dragDevices: {
+          PointerDeviceKind.touch,
+          PointerDeviceKind.mouse
+        }),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primarySwatch: primarySwatch),
         home: const MyApp(),
